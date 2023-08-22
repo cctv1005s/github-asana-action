@@ -2,29 +2,27 @@
   "name": "github-asana",
   "version": "4.0.0",
   "description": "Action to integrate git with asana",
-  "main": "index.js",
-  "type": "module",
+  "main": "dist/index.ts",
   "scripts": {
-    "test": "jest",
-    "transform": "rm -rf ./build && mkdir -p build && bun build --target node ./src/action.ts  > build/action.tmp",
-    "build": "yarn transform && cat ./patch/bun-require.patch > build/action.js && cat build/action.tmp >> build/action.js && rm build/action.tmp",
+    "test": "vitest",
+    "build": "tsc",
     "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/insurify/github-actions.git"
+    "url": "git+https://github.com/cctv1005s/github-asana-action.git"
   },
   "keywords": [
     "github-actions",
     "asana",
     "git"
   ],
-  "author": "Ali Sajid",
+  "author": "Li Yang(cctv1005s@gmail.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/insurify/github-actions/issues"
+    "url": "https://github.com/cctv1005s/github-asana-action/issues"
   },
-  "homepage": "https://github.com/insurify/github-actions#readme",
+  "homepage": "https://github.com/cctv1005s/github-asana-action",
   "dependencies": {
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",

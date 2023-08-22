@@ -1,5 +1,5 @@
 import core from '@actions/core';
-import action from './build/action.js'
+import action from './action';
 
 async function run() {
   try {

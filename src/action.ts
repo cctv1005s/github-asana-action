@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import * as asana from 'asana';
-import {AsanaClient} from "asana";
+import { AsanaClient } from "./asana-client";
 
 async function action() {
     const ASANA_PAT = core.getInput('asana-pat', { required: true });
@@ -11,14 +10,12 @@ async function action() {
     const REGEX_STRING = `${TRIGGER_PHRASE}(?:\\s*)https:\\/\\/app.asana.com\\/(\\d+)\\/(?<project>\\d+)\\/(?<task>\\d+)`;
     const REGEX = new RegExp(REGEX_STRING, 'g');
 
-    console.log('pull_request', PULL_REQUEST);
-
     const client = await new AsanaClient(ASANA_PAT);
-    if (client === null) {
-        throw new Error('client authorization failed');
+
+    if (!PULL_REQUEST?.body) {
+        return;
     }
 
-    console.info('looking in body', PULL_REQUEST.body, 'regex', REGEX_STRING);
     const foundAsanaTasks: string[] = [];
     let parseAsanaURL;
     while ((parseAsanaURL = REGEX.exec(PULL_REQUEST.body)) !== null) {
@@ -29,9 +26,10 @@ async function action() {
         }
         foundAsanaTasks.push(taskId);
     }
-    console.info(`found ${foundAsanaTasks.length} taskIds:`, foundAsanaTasks.join(','));
 
+    console.info(`found ${foundAsanaTasks.length} taskIds:`, foundAsanaTasks.join(','));
     console.info('calling', ACTION);
+
     switch (ACTION) {
         case 'assert-link': {
             const githubToken = core.getInput('github-token', { required: true });
@@ -53,7 +51,7 @@ async function action() {
             const commentId = core.getInput('comment-id');
             const htmlText = core.getInput('text', { required: true });
             const isPinned = core.getInput('is-pinned') === 'true';
-            const comments: asana.resources.Story[] = [];
+            const comments = [];
             for (const taskId of foundAsanaTasks) {
                 if (commentId) {
                     const comment = await client.findComment(taskId, commentId);
@@ -90,9 +88,7 @@ async function action() {
             for (const taskId of foundAsanaTasks) {
                 console.info("marking task", taskId, isComplete ? 'complete' : 'incomplete');
                 try {
-                    await client.tasks.update(taskId, {
-                        completed: isComplete
-                    });
+                    await client.completeTask(taskId);
                 } catch (error) {
                     console.error('rejecting promise', error);
                 }
@@ -105,7 +101,7 @@ async function action() {
             const targets: Array<any> = JSON.parse(targetJSON);
             const movedTasks: string[] = [];
             for (const taskId of foundAsanaTasks) {
-                await client.moveSection(client, taskId, targets);
+                await client.moveSection(taskId, targets);
                 movedTasks.push(taskId);
             }
             return movedTasks;
