@@ -19,7 +19,7 @@ async function action() {
   const foundAsanaTasks: string[] = [];
   let parseAsanaURL;
   while ((parseAsanaURL = REGEX.exec(PULL_REQUEST.body)) !== null) {
-    const taskId = parseAsanaURL.groups.task;
+    const taskId = parseAsanaURL.groups?.task;
     if (!taskId) {
       core.error(
         `Invalid Asana task URL after the trigger phrase ${TRIGGER_PHRASE}`,

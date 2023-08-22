@@ -2,10 +2,10 @@
   "name": "github-asana",
   "version": "4.0.0",
   "description": "Action to integrate git with asana",
-  "main": "dist/index.ts",
+  "main": "dist/src/index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "format": "prettier --check --write .",
     "format:fail": "prettier --check ."
   },
