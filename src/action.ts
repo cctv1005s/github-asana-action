@@ -44,15 +44,16 @@ async function action() {
       const statusState =
         !linkRequired || foundAsanaTasks.length > 0 ? 'success' : 'error';
       core.info(
-        `setting ${statusState} for ${github.context.payload.pull_request.head.sha}`,
+        `setting ${statusState} for ${github.context.payload.pull_request?.head.sha}`,
       );
+
       // @ts-ignore
-      octokit.repos.createStatus({
+      await octokit.repos.createStatus({
         ...github.context.repo,
         context: 'asana-link-presence',
         state: statusState,
         description: 'asana link not found',
-        sha: github.context.payload.pull_request.head.sha,
+        sha: github.context.payload.pull_request?.head.sha,
       });
       break;
     }

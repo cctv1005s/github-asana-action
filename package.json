@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf ./dist && tsc",
+    "build": "rm -rf ./dist",
     "format": "prettier --check --write .",
     "format:fail": "prettier --check ."
   },
