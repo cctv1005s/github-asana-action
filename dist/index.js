@@ -100293,15 +100293,15 @@ var require_dist = __commonJS({
 });
 
 // src/index.ts
-var import_core = __toESM(require_core(), 1);
+var import_core = __toESM(require_core());
 
 // src/action.ts
-var core = __toESM(require_core(), 1);
-var github = __toESM(require_github(), 1);
+var core = __toESM(require_core());
+var github = __toESM(require_github());
 
 // src/asana-client.ts
 var import_util = require("util");
-var import_asana = __toESM(require_dist(), 1);
+var import_asana = __toESM(require_dist());
 var AsanaClient = class {
   constructor(asanaPAT) {
     const defaultClient = import_asana.default.ApiClient.instance;
@@ -100422,7 +100422,6 @@ var AsanaClient = class {
    * @param prUrl
    */
   async addAttachments(taskId, prName, prUrl) {
-    const apiInstance = new import_asana.default.AttachmentsApi();
     const opts = {
       resource_subtype: "external",
       parent: taskId,
@@ -100430,13 +100429,9 @@ var AsanaClient = class {
       name: prName,
       connect_to_app: false
     };
-    return new Promise((resolve, reject) => {
-      apiInstance.createAttachmentForObject(opts, (error2, data) => {
-        if (error2)
-          return reject(error2);
-        return reject(data);
-      });
-    });
+    return await (0, import_util.promisify)(this.attachmentsApi.createAttachmentForObject).bind(
+      this.attachmentsApi
+    )(opts);
   }
 };
 
@@ -100558,7 +100553,8 @@ async function action() {
     }
     case "attach-pr": {
       if (!PULL_REQUEST.html_url) {
-        throw Error("Pull request url not found");
+        core.error("Pull request url not found");
+        return;
       }
       for (const taskId of foundAsanaTasks) {
         await client.addAttachments(
@@ -100567,7 +100563,7 @@ async function action() {
           PULL_REQUEST.html_url
         );
       }
-      break;
+      return;
     }
     default:
       core.setFailed(`unexpected action ${ACTION}`);

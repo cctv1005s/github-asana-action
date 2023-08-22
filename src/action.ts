@@ -127,7 +127,9 @@ async function action() {
     }
     case 'attach-pr': {
       if (!PULL_REQUEST.html_url) {
-        throw Error('Pull request url not found');
+        core.error('Pull request url not found');
+
+        return;
       }
 
       for (const taskId of foundAsanaTasks) {
@@ -137,7 +139,8 @@ async function action() {
           PULL_REQUEST.html_url,
         );
       }
-      break;
+
+      return;
     }
     default:
       core.setFailed(`unexpected action ${ACTION}`);

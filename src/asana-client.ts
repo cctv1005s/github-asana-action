@@ -160,7 +160,6 @@ export class AsanaClient {
    * @param prUrl
    */
   async addAttachments(taskId: string, prName: string, prUrl: string) {
-    const apiInstance = new Asana.AttachmentsApi();
     const opts = {
       resource_subtype: 'external',
       parent: taskId,
@@ -169,11 +168,8 @@ export class AsanaClient {
       connect_to_app: false,
     };
 
-    return new Promise((resolve, reject) => {
-      apiInstance.createAttachmentForObject(opts, (error, data) => {
-        if (error) return reject(error);
-        return reject(data);
-      });
-    });
+    return await promisify(this.attachmentsApi.createAttachmentForObject).bind(
+      this.attachmentsApi,
+    )(opts);
   }
 }

@@ -1,3 +1,4 @@
 *.json
 *.md
 *.yml
+dist/index.js
