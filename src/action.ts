@@ -124,6 +124,20 @@ async function action() {
       }
       return movedTasks;
     }
+    case 'attach-pr': {
+      if (!PULL_REQUEST.html_url) {
+        throw Error('Pull request url not found');
+      }
+
+      for (const taskId of foundAsanaTasks) {
+        await client.addAttachments(
+          taskId,
+          PULL_REQUEST.title,
+          PULL_REQUEST.html_url,
+        );
+      }
+      break;
+    }
     default:
       core.setFailed(`unexpected action ${ACTION}`);
   }

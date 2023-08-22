@@ -4,7 +4,7 @@
   "description": "Action to integrate git with asana",
   "main": "dist/index.ts",
   "scripts": {
-    "test": "vitest",
+    "test": "jest",
     "build": "tsc",
     "format": "prettier --check --write .",
     "format:fail": "prettier --check ."
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@octokit-next/endpoint": "^2.7.1",
-    "jest": "^26.0.1",
+    "jest": "^29.6.3",
     "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   }
