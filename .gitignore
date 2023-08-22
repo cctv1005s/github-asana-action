@@ -61,3 +61,4 @@ typings/
 .idea
 node_modules
 node_modules/*
+bun.lockb

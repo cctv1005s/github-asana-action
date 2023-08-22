@@ -1,9 +1,9 @@
-const core = require('@actions/core');
-const action = require('./action');
+import core from '@actions/core';
+import action from './build/action.js'
 
 async function run() {
   try {
-    await action.action();
+    await action();
   } catch (error) {
     core.setFailed(error.message);
   }

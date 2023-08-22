@@ -3,8 +3,12 @@
   "version": "4.0.0",
   "description": "Action to integrate git with asana",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "transform": "rm -rf ./build && mkdir -p build && bun build --target node ./src/action.ts  > build/action.tmp",
+    "build": "yarn transform && cat ./patch/bun-require.patch > build/action.js && cat build/action.tmp >> build/action.js && rm build/action.tmp",
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -27,6 +31,11 @@
     "asana": "^2.0.3"
   },
   "devDependencies": {
-    "jest": "^26.0.1"
+    "@octokit-next/endpoint": "^2.7.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "jest": "^26.0.1",
+    "typescript": "^5.1.6"
   }
 }
