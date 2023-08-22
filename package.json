@@ -2,10 +2,12 @@
   "name": "github-asana",
   "version": "4.0.0",
   "description": "Action to integrate git with asana",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf ./dist",
+    "patch": "bun run ./patch/patch.ts",
+    "build": "rm -rf ./dist && bun build --target=node --outfile ./dist/index.js ./src/index.ts && yarn patch",
     "format": "prettier --check --write .",
     "format:fail": "prettier --check ."
   },
